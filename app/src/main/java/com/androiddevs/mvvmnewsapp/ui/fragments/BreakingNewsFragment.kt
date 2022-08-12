@@ -37,6 +37,10 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
                         Log.e(TAG, "An error occurred $message")
                     }
                 }
+
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
             }
         })
     }
