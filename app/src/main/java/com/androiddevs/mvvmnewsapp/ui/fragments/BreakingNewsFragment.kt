@@ -23,6 +23,12 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
         viewModel = (activity as NewsActivity).viewModel
         setupRecyclerView()
 
+        newsAdapter.setOnItemClickListener{
+            val bundle = Bundle().apply {
+                putSerializable("article", it)
+            }
+        }
+
         viewModel.breakingNews.observe(viewLifecycleOwner, Observer { response ->
             when(response){
                 is Resource.Success -> {
@@ -46,7 +52,7 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
     }
 
     private fun hideProgressBar() {
-        paginationProgressBar.visibility = View.INVISIBLE
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    paginationProgressBar.visibility = View.INVISIBLE
     }
 
     private fun showProgressBar() {
