@@ -41,15 +41,6 @@ class NewsViewModel(
     private fun handleBreakingNewsResponse(response: Response<NewsResponse>): Resource<NewsResponse>{
         if(response.isSuccessful){
             response.body()?.let { resultResponse ->
-                return Resource.Success(resultResponse)
-            }
-        }
-        return Resource.Error(response.message())
-    }
-
-    private fun handleSearchNewsResponse(response: Response<NewsResponse>): Resource<NewsResponse>{
-        if(response.isSuccessful){
-            response.body()?.let { resultResponse ->
                 breakingNewPage++
                 if (breakingNewsResponse == null){
                     breakingNewsResponse = resultResponse
@@ -58,7 +49,24 @@ class NewsViewModel(
                     val  newArticles = resultResponse.articles
                     oldArticle?.addAll(newArticles)
                 }
-                return Resource.Success(resultResponse)
+                return Resource.Success(breakingNewsResponse ?:  resultResponse)
+            }
+        }
+        return Resource.Error(response.message())
+    }
+
+    private fun handleSearchNewsResponse(response: Response<NewsResponse>): Resource<NewsResponse>{
+        if(response.isSuccessful){
+            response.body()?.let { resultResponse ->
+                searchNewPage++
+                if (searchNewsResponse == null){
+                    searchNewsResponse = resultResponse
+                } else {
+                    val oldArticle = searchNewsResponse?.articles
+                    val  newArticles = resultResponse.articles
+                    oldArticle?.addAll(newArticles)
+                }
+                return Resource.Success(searchNewsResponse ?:  resultResponse)
             }
         }
         return Resource.Error(response.message())
