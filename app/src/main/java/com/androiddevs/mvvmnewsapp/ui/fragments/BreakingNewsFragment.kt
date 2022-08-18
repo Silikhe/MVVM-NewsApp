@@ -60,11 +60,13 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
     }
 
     private fun hideProgressBar() {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    paginationProgressBar.visibility = View.INVISIBLE
+        paginationProgressBar.visibility = View.INVISIBLE
+        isLoading = false
     }
 
     private fun showProgressBar() {
         paginationProgressBar.visibility = View.VISIBLE
+        isLoading = true
     }
 
     var isLoading = false
@@ -90,7 +92,14 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
             val isAtLastItem = firstVisibleItemPosition + visibleItemCount >= totalItemCount
             val isNotAtBeggining = firstVisibleItemPosition >= 0
             val isTotalMoreThanVisible = totalItemCount >= QUERY_PAGE_SIZE
-            val shouldPaginate = isNotLoadingAndNotLastPage
+            val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeggining && isTotalMoreThanVisible && isScrolling
+
+            if (shouldPaginate){
+                viewModel.getBreakingNews("us")
+                isScrolling = false
+            }else{
+                rvBreakingNews.setPadding(0, 0, 0, 0)
+            }
         }
     }
 
@@ -99,6 +108,7 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
         rvBreakingNews.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)
+            addOnScrollListener(this@BreakingNewsFragment.scrollListener)
         }
     }
 }
