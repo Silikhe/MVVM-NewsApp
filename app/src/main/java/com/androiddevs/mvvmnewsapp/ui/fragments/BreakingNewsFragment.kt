@@ -82,7 +82,13 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
             super.onScrolled(recyclerView, dx, dy)
             val layoutManager = recyclerView.layoutManager as LinearLayoutManager
             val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-            val
+            val visibleItemCount = layoutManager.childCount
+            val totalItemCount = layoutManager.itemCount
+
+            val isNotLoadingAndNotLastPage = !isLoading && !isLastPage
+            val isAtLastItem = firstVisibleItemPosition + visibleItemCount >= totalItemCount
+            val isNotAtBeggining = firstVisibleItemPosition >= 0
+            val isTotalMoreThanVisible = firstVisibleItemPosition
         }
     }
 
