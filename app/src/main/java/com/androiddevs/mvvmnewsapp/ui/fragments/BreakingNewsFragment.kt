@@ -42,7 +42,12 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
                 is Resource.Success -> {
                     hideProgressBar()
                     response.data?.let { newsResponse ->
-                       newsAdapter.differ.submitList(newsResponse.articles)
+                       newsAdapter.differ.submitList(newsResponse.articles.toList())
+                        val totalPages = newsResponse.totalResults / QUERY_PAGE_SIZE + 2
+                        isLastPage = viewModel.breakingNewPage == totalPages
+                        if (isLastPage){
+                                rvBreakingNews.setPadding(0, 0, 0, 0)
+                        }
                     }
                 }
                 is Resource.Error -> {
@@ -90,15 +95,13 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
 
             val isNotLoadingAndNotLastPage = !isLoading && !isLastPage
             val isAtLastItem = firstVisibleItemPosition + visibleItemCount >= totalItemCount
-            val isNotAtBeggining = firstVisibleItemPosition >= 0
+            val isNotAtBeginning = firstVisibleItemPosition >= 0
             val isTotalMoreThanVisible = totalItemCount >= QUERY_PAGE_SIZE
-            val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeggining && isTotalMoreThanVisible && isScrolling
+            val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning && isTotalMoreThanVisible && isScrolling
 
             if (shouldPaginate){
                 viewModel.getBreakingNews("us")
                 isScrolling = false
-            }else{
-                rvBreakingNews.setPadding(0, 0, 0, 0)
             }
         }
     }
