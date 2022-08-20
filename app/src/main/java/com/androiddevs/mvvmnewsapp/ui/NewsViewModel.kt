@@ -2,6 +2,8 @@ package com.androiddevs.mvvmnewsapp.ui
 
 import android.app.Application
 import android.content.Context
+import android.net.ConnectivityManager
+import android.os.Build
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -90,6 +92,9 @@ class NewsViewModel(
     private fun hasInternetConnection() : Boolean {
         val connectivityManager = getApplication<NewsApplication>().getSystemService(
             Context.CONNECTIVITY_SERVICE
-        )
+        ) as ConnectivityManager
+        if (Build.VERSION.SDK_INT  >= Build.VERSION_CODES.M){
+            val activeNetwork = connectivityManager.activeNetwork ?: return false
+        }
     }
 }
