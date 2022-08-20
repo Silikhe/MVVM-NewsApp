@@ -95,6 +95,7 @@ class NewsViewModel(
         ) as ConnectivityManager
         if (Build.VERSION.SDK_INT  >= Build.VERSION_CODES.M){
             val activeNetwork = connectivityManager.activeNetwork ?: return false
+            val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
         }
     }
 }
