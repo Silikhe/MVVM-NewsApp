@@ -1,5 +1,7 @@
 package com.androiddevs.mvvmnewsapp.ui
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,8 +13,9 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class NewsViewModel(
+    app:Application,
     val newsRepository: NewsRepository
-) :ViewModel() {
+) :AndroidViewModel(app) {
     val breakingNews : MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     var breakingNewPage = 1
     var breakingNewsResponse: NewsResponse? = null
@@ -80,5 +83,9 @@ class NewsViewModel(
 
     fun deleteArticle(article: Article) = viewModelScope.launch {
         newsRepository.deleteArticle(article)
+    }
+
+    private fun hasInternetConnection() : Boolean {
+
     }
 }
